@@ -4,8 +4,8 @@ import { Column } from "primereact/column";
 import { Paginator } from "primereact/paginator";
 import { Checkbox } from "primereact/checkbox";
 import { Button } from "primereact/button";
-import { Dropdown } from "primereact/dropdown"; // ✅ NEW: Added Dropdown
-import { InputNumber } from "primereact/inputnumber"; // ✅ NEW: Added InputNumber
+import { Dropdown } from "primereact/dropdown";
+import { InputNumber } from "primereact/inputnumber";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
@@ -43,14 +43,12 @@ const App: React.FC = () => {
   const [showSelectionPanel, setShowSelectionPanel] = useState<boolean>(false);
   const [forceRender, setForceRender] = useState(0);
 
-  // ✅ NEW: Row selection dropdown states
   const [showRowSelector, setShowRowSelector] = useState<boolean>(false);
   const [rowCountToSelect, setRowCountToSelect] = useState<number>(5);
   const [selectionMode, setSelectionMode] = useState<string>("from-current");
 
   const rowsPerPage = 12;
 
-  // ✅ NEW: Selection mode options
   const selectionModeOptions = [
     { label: "From Current Page", value: "from-current" },
     { label: "From All Pages", value: "from-all" },
@@ -122,7 +120,6 @@ const App: React.FC = () => {
     [artworks]
   );
 
-  // ✅ NEW: Handle automatic row selection based on count
   const handleSelectRowsByCount = () => {
     setSelectedRows((prevSelected) => {
       let newSelected = { ...prevSelected };
@@ -130,7 +127,6 @@ const App: React.FC = () => {
 
       switch (selectionMode) {
         case "from-current":
-          // Select from current page
           const currentPageIds = artworks.map((artwork) => artwork.id);
           rowsToSelect = currentPageIds.slice(
             0,
@@ -139,7 +135,6 @@ const App: React.FC = () => {
           break;
 
         case "random":
-          // Random selection from current page
           const shuffled = [...artworks].sort(() => 0.5 - Math.random());
           rowsToSelect = shuffled
             .slice(0, Math.min(rowCountToSelect, shuffled.length))
@@ -147,7 +142,6 @@ const App: React.FC = () => {
           break;
 
         case "from-all":
-          // For demonstration, select from current page (in real app, you'd need to fetch from multiple pages)
           const allCurrentIds = artworks.map((artwork) => artwork.id);
           rowsToSelect = allCurrentIds.slice(
             0,
@@ -159,7 +153,6 @@ const App: React.FC = () => {
           break;
       }
 
-      // Clear current selections and add new ones
       newSelected = {};
       rowsToSelect.forEach((id) => {
         newSelected[id] = true;
@@ -169,10 +162,9 @@ const App: React.FC = () => {
     });
 
     setForceRender((prev) => prev + 1);
-    setShowRowSelector(false); // Close the selector after selection
+    setShowRowSelector(false);
   };
 
-  // ✅ NEW: Clear all selections
   const handleClearAllSelections = () => {
     setSelectedRows({});
     setForceRender((prev) => prev + 1);
@@ -241,7 +233,6 @@ const App: React.FC = () => {
     <div className="app">
       <h1>Art Institute of Chicago - Artworks</h1>
 
-      {/* ✅ NEW: Row Selection Controls */}
       <div className="selection-controls">
         <div className="selection-buttons">
           <Button
@@ -265,7 +256,6 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* ✅ NEW: Row Selection Dropdown Panel */}
         {showRowSelector && (
           <div className="row-selector-panel">
             <h4>Select Multiple Rows</h4>
@@ -316,7 +306,6 @@ const App: React.FC = () => {
         )}
       </div>
 
-      {/* Existing Selection Panel */}
       {showSelectionPanel && (
         <div className="selection-panel">
           <h3>Row Selection Panel</h3>
